@@ -1,12 +1,45 @@
-import React from 'react'
-import { Button, StyleSheet, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Alert, Button, StyleSheet, View } from 'react-native'
+import {getCurrentPositionAsync, useForegroundPermissions, PermissionStatus} from 'expo-location'
+import { useNavigation,useRoute,useIsFocused } from '@react-navigation/native';
 
 function LocationPicker() {
-    function getLocationHandler(){
-
+    const [locationPermissionInformation, requestPermission]=useForegroundPermissions();
+    const [pickedLocation, setPickedLocation] = useState()
+    const isFocused=useIsFocused();
+    const navigation=useNavigation();
+    const route=useRoute();
+    useEffect(()=>{
+        if(isFocused&&route.params){
+            var mapPickedLocation={lat:route.params.pickedLat, lng:route.params.pickedLng}
+        }
+        setPickedLocation(mapPickedLocation)
+        
+    }, [route, isFocused])
+    async function verifyPermissions(){
+        if(locationPermissionInformation.status===PermissionStatus.UNDETERMINED){
+            const permissionResponse=await requestPermission();
+            return permissionResponse.granted;
+        }
+        if(locationPermissionInformation.status===PermissionStatus.DENIED){
+            Alert.alert(
+                "Insufficient Permissions",
+                "You need to grant location permissions to use this app"
+            );
+            return false
+        }
+        return true
     }
-    function pickOnMapHandler(){
-
+    async function getLocationHandler(){
+        const havePermission=await verifyPermissions();
+        if(!havePermission){
+            return;
+        }
+        const location=await getCurrentPositionAsync()
+        console.log(location)
+    }
+    async function pickOnMapHandler(){
+        navigation.navigate('Map')
     }
   return (
     <View>
