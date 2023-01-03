@@ -2,7 +2,7 @@ import { launchCameraAsync, useCameraPermissions, PermissionStatus } from 'expo-
 import React, { useState } from 'react'
 import { Alert, Button, Image, StyleSheet, View, Text } from 'react-native'
 
-function ImagePicker() {
+function ImagePicker({onTakeImage}) {
     var [useCameraPermissionsInformation, requestPermission] = useCameraPermissions();
     var [pickedImage, setPickedImage]=useState("")
 
@@ -31,6 +31,7 @@ function ImagePicker() {
             quality: 0.5,
         });
         await setPickedImage(pickedImage=image.assets[0].uri)
+        onTakeImage(pickedImage);
     }
     let imagePreview=<Text style={styles.imagePreview}>No image taken yet</Text>
     if (pickedImage){

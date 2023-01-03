@@ -3,7 +3,7 @@ import { Alert, Button, StyleSheet, View } from 'react-native'
 import {getCurrentPositionAsync, useForegroundPermissions, PermissionStatus} from 'expo-location'
 import { useNavigation,useRoute,useIsFocused } from '@react-navigation/native';
 
-function LocationPicker() {
+function LocationPicker({onPickLocation}) {
     const [locationPermissionInformation, requestPermission]=useForegroundPermissions();
     const [pickedLocation, setPickedLocation] = useState()
     const isFocused=useIsFocused();
@@ -16,6 +16,9 @@ function LocationPicker() {
         setPickedLocation(mapPickedLocation)
         
     }, [route, isFocused])
+    useEffect(()=>{
+        onPickLocation(pickedLocation)
+    },[pickedLocation, onPickLocation])
     async function verifyPermissions(){
         if(locationPermissionInformation.status===PermissionStatus.UNDETERMINED){
             const permissionResponse=await requestPermission();

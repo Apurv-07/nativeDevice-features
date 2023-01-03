@@ -2,10 +2,15 @@ import React from 'react'
 import { View } from 'react-native'
 import PlaceForm from '../Components/PlaceForm'
 
-function AddPlace() {
+function AddPlace({navigation}) {
+  function createPlaceHandler(place){
+    navigation.navigate('AllPlaces', {
+      place: place
+    })
+  }
   return (
     <View>
-       <PlaceForm /> 
+       <PlaceForm oncreatePlace={createPlaceHandler}/> 
     </View>
   )
 }

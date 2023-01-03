@@ -6,17 +6,25 @@ import AddPlace from "./screens/AddPlace";
 import AllPlaces from "./screens/AllPlaces";
 import Map from "./screens/Map";
 import IconButton from "./Components/UI/IconButton";
+import { useEffect } from "react";
+import { initialWindowMetrics } from "react-native-safe-area-context";
+import { init } from './screens/database'
 export default function App() {
   var Stack = createNativeStackNavigator();
+  useEffect(()=>{
+    init()
+  },[])
   return (
     <>
       <StatusBar style="dark" />
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{
-          headerStyle: {backgroundColor: 'blue'},
-          headerTintColor: 'whitesmoke',
-          contentStyle: {backgroundColor: 'grey'}
-        }}>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: "blue" },
+            headerTintColor: "whitesmoke",
+            contentStyle: { backgroundColor: "grey" },
+          }}
+        >
           <Stack.Screen
             name="AllPlaces"
             component={AllPlaces}
@@ -31,7 +39,11 @@ export default function App() {
               ),
             })}
           />
-          <Stack.Screen name="AddPlace" component={AddPlace} options={{title: 'Add a new place'}} />
+          <Stack.Screen
+            name="AddPlace"
+            component={AddPlace}
+            options={{ title: "Add a new place" }}
+          />
           <Stack.Screen name="Map" component={Map} />
         </Stack.Navigator>
       </NavigationContainer>
