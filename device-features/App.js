@@ -6,14 +6,25 @@ import AddPlace from "./screens/AddPlace";
 import AllPlaces from "./screens/AllPlaces";
 import Map from "./screens/Map";
 import IconButton from "./Components/UI/IconButton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { initialWindowMetrics } from "react-native-safe-area-context";
-import { init } from './screens/database'
+import { init } from "./screens/database";
 export default function App() {
   var Stack = createNativeStackNavigator();
+  const [dbInitialized, setDbInitialized]=useState(true)
   useEffect(()=>{
-    init()
+    init().then(()=>{
+      setDbInitialized(false)
+      console.log("DBINITIALIZED")
+    }).then(()=>{
+      SplashScreen.preventAutoHideAsync();
+    }).catch(err=>console.log(err))
   },[])
+  if(!dbInitialized){
+    return <Text>
+      Loading....
+    </Text>
+  }
   return (
     <>
       <StatusBar style="dark" />

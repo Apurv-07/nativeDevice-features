@@ -9,7 +9,6 @@ export function init(){ //Needs to run atleast once for the structure defining
                 id INTEGER PRIMARY KEY NOT NULL,
                 title TEXT NOT NULL,
                 imageUri TEXT NOT NULL,
-                address REAL NOT NULL,
             )`,
             [],
             ()=>{
@@ -21,5 +20,22 @@ export function init(){ //Needs to run atleast once for the structure defining
           );
         });
     })
-    return promise();
+    return promise;
+}
+export function insertPlace(place){
+    const promise=new Promise((resolve, reject)=>{
+        database.transaction((tx)=>{
+            tx.executeSql(`INSERT INTO places (title, imageUri) VALUES (?, ?)`, [place.title, place.imageUri],
+            (_,result)=>{
+                console.log(result);
+                resolve(result);
+            },
+            (_, error)=>{
+                reject(error)
+            }
+            
+            )
+        });
+    })
+    return promise;
 }

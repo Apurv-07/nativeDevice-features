@@ -1,8 +1,21 @@
 import React from 'react'
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { insertPlace } from '../screens/database'
 
 function PlaceItem({place, onSelect}) {
+  console.log("The place is")
   console.log(place)
+  var promise=new Promise((resolve,reject)=>{
+    if (place){
+      resolve("The data was insert")
+    }else{
+      reject("The data was not successful")
+    }
+  })
+  promise.then((data)=>{
+    console.log(data)
+    insertPlace(place)
+  }).catch(err=>console.log(err))
   return (
     <Pressable style={({pressed})=>[styles.item, pressed&&styles.pressed]} onPress={onSelect}>
         <Image style={styles.image} source={{uri: place.imageUri}} />
